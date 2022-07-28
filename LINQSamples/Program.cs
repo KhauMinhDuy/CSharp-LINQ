@@ -18,7 +18,9 @@ namespace LINQSamples
             //vm.GetAll();
             //vm.GetSingleColumn();
             //vm.GetSpecificColumns();
-            vm.AnonymousClass();
+            //vm.AnonymousClass();
+            //vm.OrderBy();
+            vm.OrderByDescending();
 
 
             // Display Product Collection
