@@ -14,7 +14,12 @@ namespace LINQSamples
             };
 
             // Call a sample method
-            vm.GetAllLooping();
+            //vm.GetAllLooping();
+            //vm.GetAll();
+            //vm.GetSingleColumn();
+            //vm.GetSpecificColumns();
+            vm.AnonymousClass();
+
 
             // Display Product Collection
             foreach (var item in vm.Products)

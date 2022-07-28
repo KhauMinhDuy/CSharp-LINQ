@@ -29,7 +29,10 @@ namespace LINQSamples
         {
             List<Product> list = new List<Product>();
 
-            
+            foreach (Product product in Products)
+            {
+                list.Add(product);
+            }
 
             ResultText = $"Total Products: {list.Count}";
         }
@@ -46,12 +49,12 @@ namespace LINQSamples
             if (UseQuerySyntax)
             {
                 // Query Syntax
-
+                list = (from prod in Products select prod).ToList();
             }
             else
             {
                 // Method Syntax
-
+                list = Products.Select(prod => prod).ToList();
             }
 
             ResultText = $"Total Products: {list.Count}";
@@ -70,12 +73,12 @@ namespace LINQSamples
             if (UseQuerySyntax)
             {
                 // Query Syntax
-
+                list.AddRange(from prod in Products select prod.Name);
             }
             else
             {
                 // Method Syntax
-
+                list.AddRange(Products.Select(prod => prod.Name));
             }
 
             foreach (string item in list)
@@ -97,12 +100,12 @@ namespace LINQSamples
             if (UseQuerySyntax)
             {
                 // Query Syntax
-
+                Products = (from prod in Products select new Product { ProductID = prod.ProductID, Name = prod.Name, Size = prod.Size }).ToList();
             }
             else
             {
                 // Method Syntax
-
+                Products = Products.Select(prod => new Product { ProductID = prod.ProductID, Name = prod.Name, Size = prod.Size }).ToList();
             }
 
             ResultText = $"Total Products: {Products.Count}";
@@ -120,24 +123,26 @@ namespace LINQSamples
             if (UseQuerySyntax)
             {
                 // Query Syntax
-
+                var products = (from prod in Products select new { Identifier = prod.ProductID, ProductName = prod.Name, ProductSize = prod.Size });
                 // Loop through anonymous class
-                //foreach (var prod in products) {
-                //  sb.AppendLine($"Product ID: {prod.Identifier}");
-                //  sb.AppendLine($"   Product Name: {prod.ProductName}");
-                //  sb.AppendLine($"   Product Size: {prod.ProductSize}");
-                //}
+                foreach (var prod in products)
+                {
+                    sb.AppendLine($"Product ID: {prod.Identifier}");
+                    sb.AppendLine($"   Product Name: {prod.ProductName}");
+                    sb.AppendLine($"   Product Size: {prod.ProductSize}");
+                }
             }
             else
             {
                 // Method Syntax
-
+                var products = Products.Select(prod => new { Identifier = prod.ProductID, ProductName = prod.Name, ProductSize = prod.Size });
                 // Loop through anonymous class
-                //foreach (var prod in products) {
-                //  sb.AppendLine($"Product ID: {prod.Identifier}");
-                //  sb.AppendLine($"   Product Name: {prod.ProductName}");
-                //  sb.AppendLine($"   Product Size: {prod.ProductSize}");
-                //}
+                foreach (var prod in products)
+                {
+                    sb.AppendLine($"Product ID: {prod.Identifier}");
+                    sb.AppendLine($"   Product Name: {prod.ProductName}");
+                    sb.AppendLine($"   Product Size: {prod.ProductSize}");
+                }
             }
 
             ResultText = sb.ToString();
