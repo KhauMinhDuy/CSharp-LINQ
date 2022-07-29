@@ -12,12 +12,14 @@ namespace LINQSamples
         {
             // Load all Product Data
             Products = ProductRepository.GetAll();
+            Sales = SalesOrderDetailRepository.GetAll();
         }
         #endregion
 
         #region Properties
         public bool UseQuerySyntax { get; set; }
         public List<Product> Products { get; set; }
+        public List<SalesOrderDetail> Sales { get; set; }
         public string ResultText { get; set; }
         #endregion
 
@@ -450,6 +452,157 @@ namespace LINQSamples
 
             Products.Clear();
             ResultText = product != null ? $"Found {product}" : "Not Found or multiple elements found";
+        }
+        #endregion
+
+        #region ForEach Method
+        /// <summary>
+        /// ForEach allows you to iterate over a collection to perform assignments within each object.
+        /// In this sample, assign the Length of the Name property to a property called NameLength
+        /// When using the Query syntax, assign the result to a temporary variable.
+        /// </summary>
+        public void ForEach()
+        {
+            if(UseQuerySyntax)
+            {
+                // Query Syntax
+                Products = (from prod in Products let temp = prod.NameLength = prod.Name.Length select prod).ToList();
+            }
+            else
+            {
+                // Method Syntax
+                Products.ForEach(prod => prod.NameLength = prod.Name.Length);
+            }
+
+            ResultText = $"Total Products: {Products.Count}";
+        }
+        #endregion
+
+        #region ForEachCallingMethod Method
+        /// <summary>
+        /// Iterate over each object in the collection and call a method to set a property
+        /// This method passes in each Product object into the SalesForProduct() method
+        /// In the SalesForProduct() method, the total sales for each Product is calculated
+        /// The total is placed into each Product objects' ResultText property
+        /// </summary>
+        public void ForEachCallingMethod()
+        {
+            if(UseQuerySyntax)
+            {
+                // Query Syntax
+                Products = (from prod in Products let temp = prod.TotalSales = SalesForProduct(prod) select prod).ToList();
+            }
+            else
+            {
+                // Method Syntax
+                Products.ForEach(prod => prod.TotalSales = SalesForProduct(prod));
+            }
+
+            ResultText = $"Total Products: {Products.Count}";
+        }
+
+        private decimal SalesForProduct(Product prod)
+        {
+            return Sales.Where(sale => sale.ProductID == prod.ProductID).Sum(sale => sale.LineTotal);
+        }
+        #endregion
+
+        #region Take Method
+        public void Take()
+        {
+            if(UseQuerySyntax)
+            {
+                // Query Syntax
+                Products = (from prod in Products orderby prod.Name select prod).Take(5).ToList();
+            }
+            else
+            {
+                // Method Syntax
+                Products = Products.OrderBy(prod => prod.Name).Take(5).ToList();
+            }
+
+            ResultText = $"Total Products: {Products.Count}";
+        }
+        #endregion
+
+        #region TakeWhile Method
+        public void TakeWhile()
+        {
+            if(UseQuerySyntax)
+            {
+                // Query Syntax
+                Products = (from prod in Products orderby prod.Name select prod).TakeWhile(prod => prod.Name.StartsWith("A")).ToList();
+            }
+            else
+            {
+                Products = Products.OrderBy(prod => prod.Name).TakeWhile(prod => prod.Name.StartsWith("A")).ToList();
+            }
+
+            ResultText = $"Total Products: {Products.Count}";
+        }
+        #endregion
+
+        #region Skip Method
+        public void Skip()
+        {
+            if(UseQuerySyntax)
+            {
+                // Query Syntax
+                Products = (from prod in Products orderby prod.Name select prod).Skip(20).ToList();
+            }
+            else
+            {
+                // Method Syntax
+                Products = Products.OrderBy(prod => prod.Name).Skip(20).ToList();
+            }
+
+            ResultText = $"Total Products: {Products.Count}";
+        }
+        #endregion
+
+        #region SkipWhile Method
+        public void SkipWhile()
+        {
+            if(UseQuerySyntax)
+            {
+                // Query Syntax
+                Products = (from prod in Products orderby prod.Name select prod).SkipWhile(prod => prod.Name.StartsWith("A")).ToList();
+            }
+            else
+            {
+                // Method Syntax
+                Products = Products.OrderBy(prod => prod.Name).SkipWhile(prod => prod.Name.StartsWith("A")).ToList();
+            }
+
+            ResultText = $"Total Products: {Products.Count}";
+        }
+        #endregion
+
+        #region Distinct
+        public void Distinct()
+        {
+            List<string> colors;
+
+            if(UseQuerySyntax)
+            {
+                // Query Syntax
+                colors = (from prod in Products select prod.Color).Distinct().ToList();
+            }
+            else
+            {
+                // Method Syntax
+                colors = Products.Select(prod => prod.Color).Distinct().ToList();
+            }
+
+            // Build string of Distinct Colors
+            foreach (var color in colors)
+            {
+                Console.WriteLine($"Color: {color}");
+            }
+            Console.WriteLine($"Total Colors: {colors.Count}");
+
+            // Clear products
+            Products.Clear();
         }
         #endregion
     }

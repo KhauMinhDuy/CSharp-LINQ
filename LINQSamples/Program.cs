@@ -29,7 +29,14 @@ namespace LINQSamples
             //vm.Last();
             //vm.LastOrDefault();
             //vm.Single();
-            vm.SingleOrDefault();
+            //vm.SingleOrDefault();
+            //vm.ForEach();
+            //vm.ForEachCallingMethod();
+            //vm.Take();
+            //vm.TakeWhile();
+            //vm.Skip();
+            //vm.SkipWhile();
+            vm.Distinct();
 
 
             // Display Product Collection
