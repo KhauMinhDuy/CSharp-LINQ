@@ -212,5 +212,245 @@ namespace LINQSamples
             ResultText = $"Total Products: {Products.Count}";
         }
         #endregion
+
+        #region WhereExpression
+        /// <summary>
+        /// Filter products using where. If the data is not found, an empty list is returned
+        /// </summary>
+        public void WhereExpression()
+        {
+            string search = "L";
+            if(UseQuerySyntax)
+            {
+                // Query Systax
+                Products = (from prod in Products where prod.Name.StartsWith(search) select prod).ToList();
+            } 
+            else
+            {
+                // Method Systax
+                Products = Products.Where(prod => prod.Name.StartsWith(search)).ToList();
+            }
+
+            ResultText = $"Total Products: {Products.Count}";
+        }
+        #endregion
+
+        #region WhereTwoFields
+        /// <summary>
+        /// Filter products using where with two fields. If the data is not found, an empty list is returned
+        /// </summary>
+        public void WhereTwoFields()
+        {
+            string search = "L";
+            decimal cost = 100;
+            if(UseQuerySyntax)
+            {
+                // Query syntax
+                Products = (from prod in Products where prod.Name.StartsWith(search) && prod.StandardCost > cost select prod).ToList();
+            } 
+            else
+            {
+                // Method syntax
+                Products = Products.Where(prod => prod.Name.StartsWith(search) && prod.StandardCost > cost).ToList();
+            }
+
+            ResultText = $"Total Products: {Products.Count}";
+        }
+        #endregion
+
+        #region WhereExtensionMethod
+        /// <summary>
+        /// Filter products using a custom extension method
+        /// </summary>
+        public void WhereExtensionMethod()
+        {
+            string search = "Red";
+            if(UseQuerySyntax)
+            {
+                // Query Syntax
+                Products = (from prod in Products select prod).ByColor(search).ToList();
+            }
+            else
+            {
+                // Method Syntax
+                Products = Products.ByColor(search).ToList();
+            }
+
+            ResultText = $"Total Products: {Products.Count}";
+        }
+        #endregion
+
+        #region First
+        /// <summary>
+        /// Locate a specific product using First(). First() searches forward in the list.
+        /// NOTE: First() throws an exception if the result does not produce any values
+        /// </summary>
+        public void First()
+        {
+            string color = "asdf";
+            Product product = null;
+            try
+            {
+                if (UseQuerySyntax)
+                {
+                    // Query Syntax
+                    product = (from prod in Products select prod).First(prod => prod.Color == color);
+                }
+                else
+                {
+                    // Method Syntax
+                    product = Products.First(prod => prod.Color == color);
+                }
+                Products.Clear();
+
+                ResultText = $"Found: {product}";
+            } 
+            catch
+            {
+                ResultText = "Not Found";
+            }
+            
+        }
+        #endregion
+
+        #region FirstOrDefault
+        /// <summary>
+        /// Locate a specific product using FirstOrDefault(). FirstOrDefault() searches forward in the list.
+        /// NOTE: FirstOrDefault() returns a null if no value is found
+        /// </summary>
+        public void FirstOrDefault()
+        {
+            const string color = "Red";
+            Product product = null;
+            if(UseQuerySyntax)
+            {
+                // Query Syntax
+                product = (from prod in Products select prod).FirstOrDefault(prod => prod.Color == color);
+            }
+            else
+            {
+                // Method Syntax
+                product = Products.FirstOrDefault(prod => prod.Color == color);
+            }
+            Products.Clear();
+            ResultText = product != null ? $"Found {product}" : "Not Found";
+        }
+        #endregion
+
+        #region Last
+        /// <summary>
+        /// Locate a specific product using Last(). Last() searches from the end of the list backwards.
+        /// NOTE: Last returns the last value from a collection, or throws an exception if no value is found
+        /// </summary>
+        public void Last()
+        {
+            const string color = "Red";
+            Product product = null;
+            try
+            {
+                if (UseQuerySyntax)
+                {
+                    // Query Syntax
+                    product = (from prod in Products select prod).Last(prod => prod.Color == color);
+                }
+                else
+                {
+                    // Method Syntax
+                    product = Products.Last(prod => prod.Color == color);
+                }
+
+                Products.Clear();
+                ResultText = $"Found: {product}";
+            }
+            catch
+            {
+                ResultText = "Not Found";
+            }
+            
+        }
+        #endregion
+
+        #region LastOrDefault
+        /// <summary>
+        /// Locate a specific product using LastOrDefault(). LastOrDefault() searches from the end of the list backwards.
+        /// NOTE: LastOrDefault returns the last value in a collection or a null if no values are found
+        /// </summary>
+        public void LastOrDefault()
+        {
+            const string color = "Red";
+            Product product = null;
+            if(UseQuerySyntax)
+            {
+                // Query Syntax
+                product = (from prod in Products select prod).LastOrDefault(prod => prod.Color == color);
+            } 
+            else
+            {
+                // Method Syntax
+                product = Products.LastOrDefault(prod => prod.Color == color);
+            }
+
+            Products.Clear();
+            ResultText = product != null ? $"Found {product}" : "Not Found";
+        }
+        #endregion
+
+        #region Single
+        /// <summary>
+        /// Locate a specific product using Single()
+        /// NOTE: Single() expects only a single element to be found in the collection, otherwise an exception is thrown
+        /// </summary>
+        public void Single()
+        {
+            const int productId = 706;
+            Product product = null;
+            try
+            {
+                if (UseQuerySyntax)
+                {
+                    // Query Syntax
+                    product = (from prod in Products select prod).Single(prod => prod.ProductID == productId);
+                }
+                else
+                {
+                    // Method Syntax
+                    product = Products.Single(prod => prod.ProductID == productId);
+                }
+
+                Products.Clear();
+                ResultText = $"Found {product}";
+
+            }
+            catch
+            {
+                ResultText = "Not Found or multiple elements found";
+            }
+        }
+        #endregion
+
+        #region SingleOrDefault
+        /// <summary>
+        /// Locate a specific product using SingleOrDefault()
+        /// NOTE: SingleOrDefault() returns a single element found in the collection, or a null value if none found in the collection, if multiple values are found an exception is thrown.
+        /// </summary>
+        public void SingleOrDefault()
+        {
+            const int productId = 706;
+            Product product = null;
+            if(UseQuerySyntax)
+            {
+                // Query Syntax
+                product = (from prod in Products select prod).SingleOrDefault(prod => prod.ProductID == productId);
+            }
+            else
+            {
+                // Method Syntax
+                product = Products.SingleOrDefault(prod => prod.ProductID == productId);
+            }
+
+            Products.Clear();
+            ResultText = product != null ? $"Found {product}" : "Not Found or multiple elements found";
+        }
+        #endregion
     }
 }

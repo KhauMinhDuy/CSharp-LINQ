@@ -10,7 +10,7 @@ namespace LINQSamples
             SamplesViewModel vm = new SamplesViewModel
             {
                 // Use Query or Method Syntax?
-                UseQuerySyntax = true
+                UseQuerySyntax = false
             };
 
             // Call a sample method
@@ -20,7 +20,16 @@ namespace LINQSamples
             //vm.GetSpecificColumns();
             //vm.AnonymousClass();
             //vm.OrderBy();
-            vm.OrderByDescending();
+            //vm.OrderByDescending();
+            //vm.WhereExpression();
+            //vm.WhereTwoFields();
+            //vm.WhereExtensionMethod();
+            //vm.First();
+            //vm.FirstOrDefault();
+            //vm.Last();
+            //vm.LastOrDefault();
+            //vm.Single();
+            vm.SingleOrDefault();
 
 
             // Display Product Collection
